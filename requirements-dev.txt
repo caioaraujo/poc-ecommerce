@@ -1,0 +1,3 @@
+-r requirements.txt
+freezegun==1.0.0
+model-mommy==2.0.0

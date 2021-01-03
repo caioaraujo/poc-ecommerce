@@ -1,0 +1,9 @@
+{% if lista_produtos %}
+    <ul>
+    {% for produto in lista_produtos %}
+        <li><a href="/produtos/{{ produto.id }}/">{{ produto.nome }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Não existem produtos cadastrados.</p>
+{% endif %}
