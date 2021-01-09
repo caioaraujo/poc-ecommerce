@@ -5,7 +5,7 @@ from .models import Produto
 
 
 class Produtos(LoginRequiredMixin, TemplateView):
-    login_url = 'login'
+    login_url = 'login:login_view'
     template_name = 'produto/produtos.html'
 
     def get_context_data(self, **kwargs):
