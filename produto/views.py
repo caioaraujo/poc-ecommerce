@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
 from .models import Produto
 
 
-class Produtos(TemplateView):
-
+class Produtos(LoginRequiredMixin, TemplateView):
+    login_url = 'login'
     template_name = 'produto/produtos.html'
 
     def get_context_data(self, **kwargs):
