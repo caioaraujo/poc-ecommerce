@@ -5,6 +5,13 @@
     <title>Login</title>
 </head>
 <body>
-<p>Under construction</p>
+<p>Bem-vindo(a).</p>
+<form method="post">
+    {% csrf_token %}
+    <div id="username">
+        {{ form.as_p }}
+        <input type="submit" value="Entrar">
+    </div>
+</form>
 </body>
 </html>

@@ -1,8 +1,11 @@
 from django.contrib.auth import logout
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView, RedirectView, FormView
+
+from .forms import UserForm
 
 
-class Login(TemplateView):
+class Login(FormView):
+    form_class = UserForm
     template_name = 'login/login.html'
 
 
