@@ -16,3 +16,16 @@ class TestLogout(TestCase):
         self.assertRedirects(response, '/')
         user = auth.get_user(self.client)
         self.assertFalse(user.is_authenticated)
+
+
+class TestLogin(TestCase):
+    def setUp(self):
+        self.user = mommy.make(User, username='Usuario1', password='123abc')
+
+    def test_login__success(self):
+        response = self.client.post('/', {"usuario": "Usuario1", "senha": "123abc"})
+
+        self.assertEqual(response.status_code, 200)
+        #self.assertRedirects(response, '/produtos/')
+        # user = auth.get_user(self.client)
+        # self.assertTrue(user.is_authenticated)
