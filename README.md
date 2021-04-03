@@ -2,7 +2,7 @@
 Prova de conceito para validar tecnologias e arquitetura.
 
 ## Requisitos
-Python 3.9+ (https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/)
+Python 3.9+
 
 Recomendado:<br>
 Pyenv (https://github.com/pyenv/pyenv)
