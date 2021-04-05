@@ -6,7 +6,17 @@
 {% if produto.quantidade_disponivel == 0 %}
 <p>Produto fora de estoque</p>
 {% else %}
-<p>Adicionar ao carrinho</p>
+<form method="post">
+    {% csrf_token %}
+    <div id="compra">
+        <p>
+            <label for="id_quantidade">Qtde.:</label>
+            <input id="id_quantidade" type="number" name="quantidade" min="1" max="{{ produto.quantidade_disponivel }}"
+                   required>
+        </p>
+        <input type="submit" value="Adicionar ao carrinho">
+    </div>
+</form>
 {% endif %}
 
 {% url 'login:logout' as logout_url %}
