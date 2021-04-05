@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from freezegun import freeze_time
 from model_mommy import mommy
@@ -43,3 +44,23 @@ class TestModels(TestCase):
     def test_str(self):
         produto = Produto.objects.get(id=15)
         self.assertEqual('Super produto', str(produto))
+
+
+class TestViews(TestCase):
+
+    def setUp(self):
+        self.user = mommy.make(User)
+        mommy.make('Produto', id=1, nome='Produto 1')
+        mommy.make('Produto', _quantity=10)
+
+    def test_get_produtos(self):
+        self.client.force_login(self.user)
+        response = self.client.get('/produtos/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(5, response.context['lista_produtos'].count())
+
+    def test_fetch_produto(self):
+        self.client.force_login(self.user)
+        response = self.client.get('/produtos/1/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('Produto 1', response.context['produto'].nome)
