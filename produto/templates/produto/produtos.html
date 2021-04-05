@@ -1,5 +1,6 @@
 {% if user.is_authenticated %}Olá, {{ user.username }}.{% endif %}
 
+<p>Escolha seu produto:</p>
 {% if lista_produtos %}
     <ul>
     {% for produto in lista_produtos %}

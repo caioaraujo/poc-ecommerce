@@ -12,3 +12,13 @@ class Produtos(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['lista_produtos'] = Produto.objects.all()[:5]
         return context
+
+
+class ProdutoId(LoginRequiredMixin, TemplateView):
+    login_url = 'login:login_view'
+    template_name = 'produto/produto.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['produto'] = Produto.objects.get(id=kwargs['produto_id'])
+        return context

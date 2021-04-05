@@ -1,0 +1,13 @@
+<p>{{ produto.codigo }} {{ produto.nome }}</p>
+<p>Marca: {{produto.marca}}</p>
+{% load humanize %}
+<p>Valor: R$ {{produto.valor|intcomma}}</p>
+
+{% if produto.quantidade_disponivel == 0 %}
+<p>Produto fora de estoque</p>
+{% else %}
+<p>Adicionar ao carrinho</p>
+{% endif %}
+
+{% url 'login:logout' as logout_url %}
+<p><a href="{{request.META.HTTP_REFERER}}">Voltar</a> | <a href="{{ logout_url }}">Logout</a></p>
