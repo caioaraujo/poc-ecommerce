@@ -20,7 +20,7 @@ Nota: Certifique-se de que a venv esteja ativada.<br>
 `pip install -r requirements.txt`
 
 ### Criação do banco de dados
-Execute: `python migrate.py migrate`
+Execute: `python manage.py migrate`
 
 O banco de dados é salvo local no arquivo `db.sqlite3`.
 
