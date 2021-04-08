@@ -26,6 +26,14 @@ class ProdutoId(LoginRequiredMixin, FormView, TemplateView):
         context['produto'] = Produto.objects.get(id=kwargs['produto_id'])
         return context
 
+    def form_valid(self, form):
+        # TODO - Salvar compra
+        return super().form_valid(form)
+
 
 class Compra(TemplateView):
     template_name = 'produto/finalizar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
