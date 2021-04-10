@@ -1,9 +1,4 @@
-{% if user.is_authenticated %}
-    Olá, {{ user.username }}. Aproveite nossos itens.
-{% else %}
-    Seja bem-vindo(a). <a href="/cadastro/">Cadastre-se</a> ou <a href="/login.html">entre</a>
-    para aproveitar o melhor de nossa loja.
-{% endif %}
+{% include "./header.html" %}
 
 <p>Escolha seu produto:</p>
 {% if lista_produtos %}

@@ -14,9 +14,8 @@ class Produtos(TemplateView):
         return context
 
 
-class ProdutoId(LoginRequiredMixin, FormView, TemplateView):
+class ProdutoId(FormView, TemplateView):
     form_class = CompraForm
-    login_url = 'login:login_view'
     template_name = 'produto/produto.html'
     success_url = '/finalizar'
 
@@ -30,7 +29,8 @@ class ProdutoId(LoginRequiredMixin, FormView, TemplateView):
         return super().form_valid(form)
 
 
-class Compra(TemplateView):
+class Compra(LoginRequiredMixin, TemplateView):
+    login_url = 'login:login_view'
     template_name = 'produto/finalizar.html'
 
     def get_context_data(self, **kwargs):
