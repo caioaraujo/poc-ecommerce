@@ -17,7 +17,7 @@ class TestLogoutView(TestCase):
         response = self.client.get('/logout', follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, '/')
+        self.assertRedirects(response, '/login.html')
         user = auth.get_user(self.client)
         self.assertFalse(user.is_authenticated)
 
@@ -27,9 +27,9 @@ class TestLoginView(TestCase):
         self.user = get_user_model().objects.create_user(username='Usuario1', password='123abc')
 
     def test_login__success(self):
-        response = self.client.post('/', {"usuario": "Usuario1", "senha": "123abc"})
+        response = self.client.post('/login.html', {"usuario": "Usuario1", "senha": "123abc"})
 
-        self.assertRedirects(response, '/produtos/', status_code=302)
+        self.assertRedirects(response, '/', status_code=302)
         user = auth.get_user(self.client)
         self.assertTrue(user.is_authenticated)
 

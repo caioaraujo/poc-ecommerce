@@ -7,7 +7,7 @@ from .forms import UserForm
 class Login(FormView):
     form_class = UserForm
     template_name = 'login/login.html'
-    success_url = '/produtos/'
+    success_url = '/'
 
     def form_valid(self, form):
         login(self.request, form.user)

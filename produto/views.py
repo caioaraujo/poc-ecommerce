@@ -5,8 +5,7 @@ from .forms import CompraForm
 from .models import Produto
 
 
-class Produtos(LoginRequiredMixin, TemplateView):
-    login_url = 'login:login_view'
+class Produtos(TemplateView):
     template_name = 'produto/produtos.html'
 
     def get_context_data(self, **kwargs):
@@ -19,7 +18,7 @@ class ProdutoId(LoginRequiredMixin, FormView, TemplateView):
     form_class = CompraForm
     login_url = 'login:login_view'
     template_name = 'produto/produto.html'
-    success_url = '/produtos/finalizar'
+    success_url = '/finalizar'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

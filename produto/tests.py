@@ -55,12 +55,12 @@ class TestViews(TestCase):
 
     def test_get_produtos(self):
         self.client.force_login(self.user)
-        response = self.client.get('/produtos/', follow=True)
+        response = self.client.get('/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(5, response.context['lista_produtos'].count())
 
     def test_fetch_produto(self):
         self.client.force_login(self.user)
-        response = self.client.get('/produtos/1/', follow=True)
+        response = self.client.get('/produto/1/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual('Produto 1', response.context['produto'].nome)
