@@ -1,0 +1,9 @@
+<p>Bem-vindo(a).</p>
+Informe seus dados abaixo:
+<form method="post">
+    {% csrf_token %}
+    <div id="id_cadastro">
+        <table>{{ form.as_table }}</table>
+        <input type="submit" value="Confirmar">
+    </div>
+</form>

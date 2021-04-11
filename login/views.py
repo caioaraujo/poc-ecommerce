@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login
 from django.views.generic import RedirectView, FormView
 
-from .forms import UserForm
+from .forms import CadastroForm, UserForm
 
 
 class Login(FormView):
@@ -20,3 +20,9 @@ class Logout(RedirectView):
     def dispatch(self, request, *args, **kwargs):
         logout(request)
         return super().dispatch(request, *args, **kwargs)
+
+
+class Cadastro(FormView):
+    form_class = CadastroForm
+    template_name = 'login/cadastro.html'
+    success_url = '/'
