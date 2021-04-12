@@ -28,9 +28,28 @@ class CadastroForm(forms.Form):
                             help_text='Escolha uma senha forte, com no mínimo 6 caracteres')
     senha2 = forms.CharField(label='Confirme a senha', max_length=128, widget=forms.PasswordInput())
 
-    def clean(self):
+    def clean_email(self):
         cleaned_data = super().clean()
         UserModel = get_user_model()
         email_count = UserModel.objects.filter(email=cleaned_data['email']).count()
         if email_count:
             raise ValidationError('Email já cadastrado', code='email_already_exists')
+
+        return cleaned_data
+
+    def clean_usuario(self):
+        cleaned_data = super().clean()
+        UserModel = get_user_model()
+        usuario_count = UserModel.objects.filter(username=cleaned_data['usuario']).count()
+        if usuario_count:
+            raise ValidationError('Usuário já cadastrado', code='username_already_exists')
+
+        return cleaned_data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        senha1 = cleaned_data['senha']
+        senha2 = cleaned_data['senha2']
+
+        if senha1 != senha2:
+            raise ValidationError('As senhas digitadas não coincidem', code='passwords_not_match')

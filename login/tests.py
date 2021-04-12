@@ -1,16 +1,14 @@
 from django.contrib import auth
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.test import TestCase
-from model_mommy import mommy
 
 from .forms import CadastroForm, UserForm
 
 
-class TestLogoutView(TestCase):
+class TestViews(TestCase):
     def setUp(self):
-        self.user = mommy.make(User, username='Usuario1')
+        self.user = get_user_model().objects.create_user(username='Usuario1', password='123abc')
 
     def test_logout(self):
         self.client.force_login(self.user)
@@ -21,17 +19,25 @@ class TestLogoutView(TestCase):
         user = auth.get_user(self.client)
         self.assertFalse(user.is_authenticated)
 
-
-class TestLoginView(TestCase):
-    def setUp(self):
-        self.user = get_user_model().objects.create_user(username='Usuario1', password='123abc')
-
     def test_login__success(self):
         response = self.client.post('/login.html', {"usuario": "Usuario1", "senha": "123abc"})
 
         self.assertRedirects(response, '/', status_code=302)
         user = auth.get_user(self.client)
         self.assertTrue(user.is_authenticated)
+
+    def test_cadastro__success(self):
+        data = {
+            'nome': 'Test123',
+            'sobrenome': 'Silva',
+            'email': 'teste@123.com',
+            'usuario': 'Usuario2',
+            'senha': '123abc',
+            'senha2': '123abc',
+        }
+        response = self.client.post('/cadastro.html', data)
+
+        self.assertRedirects(response, '/', status_code=302)
 
 
 class TestForms(TestCase):
@@ -69,4 +75,20 @@ class TestForms(TestCase):
         )
 
         self.assertFalse(form.is_valid())
-        self.assertTrue(form.has_error(NON_FIELD_ERRORS, "email_already_exists"))
+        self.assertTrue(form.has_error(field='email', code='email_already_exists'))
+
+    def test_cadastro_form__username_already_exists(self):
+        form = CadastroForm(
+            data={'nome': 'AAA', 'email': 'usuer@123.com', 'usuario': 'Usuario1', 'senha': '123abc', 'senha2': '123abc'}
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.has_error(field='usuario', code='username_already_exists'))
+
+    def test_cadastro_form__passwords_not_match(self):
+        form = CadastroForm(
+            data={'nome': 'AAA', 'email': 'usuer@123.com', 'usuario': 'Usuario2', 'senha': '123abc', 'senha2': 'abc123'}
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.has_error(NON_FIELD_ERRORS, code='passwords_not_match'))
