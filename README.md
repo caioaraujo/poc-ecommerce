@@ -25,7 +25,7 @@ Execute: `python manage.py migrate`
 O banco de dados é salvo local no arquivo `db.sqlite3`.
 
 ### Criação do usuário admin
-Execute: `python -m createsuperuser`
+Execute: `python manage.py createsuperuser`
 
 Preencha as informações solicitadas e utilize as credenciais no módulo admin (/admin).
 
