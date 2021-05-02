@@ -38,6 +38,8 @@ class TestViews(TestCase):
         response = self.client.post('/cadastro.html', data)
 
         self.assertRedirects(response, '/', status_code=302)
+        user = auth.get_user(self.client)
+        self.assertTrue(user.is_authenticated)
 
 
 class TestForms(TestCase):
@@ -55,7 +57,7 @@ class TestForms(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(form.has_error(NON_FIELD_ERRORS, "user_not_found"))
 
-    def test_cadastro_form__success(self):
+    def test_cadastro_form__clean_data_success(self):
         form = CadastroForm(
             data={
                 'nome': 'John',
@@ -92,3 +94,23 @@ class TestForms(TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertTrue(form.has_error(NON_FIELD_ERRORS, code='passwords_not_match'))
+
+    def test_cadastro_form__save_user_success(self):
+        form = CadastroForm(
+            data={
+                'nome': 'John',
+                'sobrenome': 'Lennon',
+                'email': 'john@lennon.com',
+                'usuario': 'j.lennon',
+                'senha': '123abc',
+                'senha2': '123abc',
+            }
+        )
+        self.assertTrue(form.is_valid())
+        new_user = form.save_user()
+        self.assertEqual('John', new_user.first_name)
+        self.assertEqual('Lennon', new_user.last_name)
+        self.assertEqual('john@lennon.com', new_user.email)
+        # Assert password was saved encrypted
+        self.assertTrue(new_user.password)
+        self.assertNotEqual('123abc', new_user.password)
