@@ -31,20 +31,22 @@ class CadastroForm(forms.Form):
     def clean_email(self):
         cleaned_data = super().clean()
         UserModel = get_user_model()
-        email_count = UserModel.objects.filter(email=cleaned_data['email']).count()
+        email = cleaned_data['email']
+        email_count = UserModel.objects.filter(email=email).count()
         if email_count:
             raise ValidationError('Email já cadastrado', code='email_already_exists')
 
-        return cleaned_data
+        return email
 
     def clean_usuario(self):
         cleaned_data = super().clean()
         UserModel = get_user_model()
-        usuario_count = UserModel.objects.filter(username=cleaned_data['usuario']).count()
+        usuario = cleaned_data['usuario']
+        usuario_count = UserModel.objects.filter(username=usuario).count()
         if usuario_count:
             raise ValidationError('Usuário já cadastrado', code='username_already_exists')
 
-        return cleaned_data
+        return usuario
 
     def clean(self):
         cleaned_data = super().clean()
@@ -53,3 +55,18 @@ class CadastroForm(forms.Form):
 
         if senha1 != senha2:
             raise ValidationError('As senhas digitadas não coincidem', code='passwords_not_match')
+
+    def save_user(self):
+        data = self.cleaned_data
+        UserModel = get_user_model()
+
+        new_user = UserModel(
+            first_name=data['nome'],
+            last_name=data.get('sobrenome'),
+            email=data['email'],
+            username=data['usuario'],
+        )
+        new_user.set_password(data['senha'])
+        new_user.save()
+
+        return new_user

@@ -15,7 +15,7 @@ class TestViews(TestCase):
         response = self.client.get('/logout', follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, '/login.html')
+        self.assertRedirects(response, '/')
         user = auth.get_user(self.client)
         self.assertFalse(user.is_authenticated)
 
