@@ -4,6 +4,7 @@ from django.core.exceptions import NON_FIELD_ERRORS
 from django.test import TestCase
 
 from .forms import CadastroForm, UserForm
+from .models import Endereco
 
 
 class TestViews(TestCase):
@@ -114,3 +115,30 @@ class TestForms(TestCase):
         # Assert password was saved encrypted
         self.assertTrue(new_user.password)
         self.assertNotEqual('123abc', new_user.password)
+
+
+class TestModels(TestCase):
+
+    def setUp(self):
+        get_user_model().objects.create_user(id=1, username='Usuario1')
+
+    def test_cria_endereco(self):
+        endereco = Endereco()
+        endereco.usuario_id = 1
+        endereco.cep = '88123321'
+        endereco.logradouro = 'Penny Lane'
+        endereco.bairro = 'Strawberry fields'
+        endereco.numero = 92
+        endereco.cidade = 'Florianópolis'
+        endereco.uf = 'SC'
+        endereco.complemento = 'Próximo a Abbey Road'
+        endereco.save()
+
+        self.assertIsNotNone(endereco.id)
+        self.assertEqual('88123321', endereco.cep)
+        self.assertEqual('Penny Lane', endereco.logradouro)
+        self.assertEqual('Strawberry fields', endereco.bairro)
+        self.assertEqual(92, endereco.numero)
+        self.assertEqual('Florianópolis', endereco.cidade)
+        self.assertEqual('SC', endereco.uf)
+        self.assertEqual('Próximo a Abbey Road', endereco.complemento)
