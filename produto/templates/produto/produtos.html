@@ -11,5 +11,7 @@
     <p>Não existem produtos cadastrados.</p>
 {% endif %}
 
+{% if user.is_authenticated %}
 {% url 'login:logout' as logout_url %}
 <a href="{{ logout_url }}">Logout</a>
+{% endif %}

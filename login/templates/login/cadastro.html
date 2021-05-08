@@ -4,6 +4,8 @@ Informe seus dados abaixo:
     {% csrf_token %}
     <div id="id_cadastro">
         <table>{{ form.as_table }}</table>
-        <input type="submit" value="Confirmar">
+        <input type="submit" value="Próximo">
     </div>
 </form>
+
+<p><a href="{{request.META.HTTP_REFERER}}">Voltar</a></p>
