@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
 
+from .models import Endereco
+
 
 class UserForm(forms.Form):
 
@@ -70,3 +72,56 @@ class CadastroForm(forms.Form):
         new_user.save()
 
         return new_user
+
+
+class EnderecoForm(forms.Form):
+    uf_list = (
+        ('AC', 'AC'),
+        ('AL', 'AL'),
+        ('AP', 'AP'),
+        ('AM', 'AM'),
+        ('BA', 'BA'),
+        ('CE', 'CE'),
+        ('DF', 'DF'),
+        ('ES', 'ES'),
+        ('GO', 'GO'),
+        ('MA', 'MA'),
+        ('MT', 'MT'),
+        ('MS', 'MS'),
+        ('MG', 'MG'),
+        ('PA', 'PA'),
+        ('PB', 'PB'),
+        ('PR', 'PR'),
+        ('PE', 'PE'),
+        ('PI', 'PI'),
+        ('RJ', 'RJ'),
+        ('RN', 'RN'),
+        ('RS', 'RS'),
+        ('RO', 'RO'),
+        ('RR', 'RR'),
+        ('SC', 'SC'),
+        ('SP', 'SP'),
+        ('SE', 'SE'),
+        ('TO', 'TO')
+    )
+
+    logradouro = forms.CharField(label='Logradouro', max_length=120)
+    numero = forms.IntegerField(label='Número')
+    bairro = forms.CharField(label='Bairro', max_length=120)
+    cidade = forms.CharField(label='Cidade', max_length=120)
+    uf = forms.ChoiceField(label='UF', choices=uf_list)
+    cep = forms.CharField(label='CEP', max_length=8, min_length=8, help_text='Somente números')
+    complemento = forms.CharField(label='Complemento', required=False)
+
+    def save_endereco(self, user):
+        data = self.cleaned_data
+        endereco = Endereco()
+        endereco.usuario = user
+        endereco.logradouro = data['logradouro']
+        endereco.cep = data['cep']
+        endereco.numero = data['numero']
+        endereco.bairro = data['bairro']
+        endereco.cidade = data['cidade']
+        endereco.uf = data['uf']
+        endereco.complemento = data.get('complemento')
+        endereco.save()

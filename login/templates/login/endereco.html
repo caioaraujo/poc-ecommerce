@@ -1,0 +1,8 @@
+<p>Falta pouco! Vamos cadastrar o endereço de entrega? :)</p>
+<form method="post">
+    {% csrf_token %}
+    <div id="endereco">
+        <table>{{ form.as_table }}</table>
+        <input type="submit" value="Próximo">
+    </div>
+</form>
