@@ -113,6 +113,14 @@ class EnderecoForm(forms.Form):
     cep = forms.CharField(label='CEP', max_length=8, min_length=8, help_text='Somente números')
     complemento = forms.CharField(label='Complemento', required=False)
 
+    def clean_cep(self):
+        cleaned_data = super().clean()
+        cep = cleaned_data['cep']
+        if not cep.isnumeric():
+            raise ValidationError('CEP inválido. Informe somente números', code='invalid_cep')
+
+        return cep
+
     def save_endereco(self, user):
         data = self.cleaned_data
         endereco = Endereco()

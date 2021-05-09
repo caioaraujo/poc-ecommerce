@@ -1,9 +1,11 @@
+from unittest import mock
+
 from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.test import TestCase
 
-from .forms import CadastroForm, UserForm
+from .forms import CadastroForm, EnderecoForm, UserForm
 from .models import Endereco
 
 
@@ -38,14 +40,28 @@ class TestViews(TestCase):
         }
         response = self.client.post('/cadastro.html', data)
 
-        self.assertRedirects(response, '/', status_code=302)
+        self.assertRedirects(response, '/endereco.html', status_code=302)
         user = auth.get_user(self.client)
         self.assertTrue(user.is_authenticated)
+
+    def test_cadastro_endereco__success(self):
+        self.client.force_login(self.user)
+        data = {
+            'logradouro': 'Penny Lane',
+            'cep': '88123321',
+            'bairro': 'Strawberry fields',
+            'cidade': 'Florianópolis',
+            'uf': 'SC',
+            'numero': 92,
+        }
+        response = self.client.post('/endereco.html', data)
+
+        self.assertRedirects(response, '/', status_code=302)
 
 
 class TestForms(TestCase):
     def setUp(self):
-        get_user_model().objects.create_user(username='Usuario1', password='123abc', email='aaa@123.com')
+        self.user = get_user_model().objects.create_user(username='Usuario1', password='123abc', email='aaa@123.com')
 
     def test_user_form__success(self):
         form = UserForm(data={'usuario': 'Usuario1', 'senha': '123abc'})
@@ -58,7 +74,7 @@ class TestForms(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(form.has_error(NON_FIELD_ERRORS, "user_not_found"))
 
-    def test_cadastro_form__clean_data_success(self):
+    def test_cadastro_form__clean_data__success(self):
         form = CadastroForm(
             data={
                 'nome': 'John',
@@ -96,7 +112,7 @@ class TestForms(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(form.has_error(NON_FIELD_ERRORS, code='passwords_not_match'))
 
-    def test_cadastro_form__save_user_success(self):
+    def test_cadastro_form__save_user__success(self):
         form = CadastroForm(
             data={
                 'nome': 'John',
@@ -115,6 +131,37 @@ class TestForms(TestCase):
         # Assert password was saved encrypted
         self.assertTrue(new_user.password)
         self.assertNotEqual('123abc', new_user.password)
+
+    def test_endereco_form__invalid_cep(self):
+        form = EnderecoForm(
+            data={
+                'logradouro': 'Penny Lane',
+                'cep': '88123-32',
+                'bairro': 'Strawberry fields',
+                'cidade': 'Florianópolis',
+                'uf': 'SC',
+                'numero': 92,
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.has_error(field='cep', code='invalid_cep'))
+
+    @mock.patch('login.models.Endereco.save')
+    def test_endereco_form__save_endereco__success(self, endereco_save):
+        form = EnderecoForm(
+            data={
+                'logradouro': 'Penny Lane',
+                'cep': '88123321',
+                'bairro': 'Strawberry fields',
+                'cidade': 'Florianópolis',
+                'uf': 'SC',
+                'numero': 92,
+            }
+        )
+        self.assertTrue(form.is_valid())
+        form.save_endereco(self.user)
+        endereco_save.assert_called_once()
 
 
 class TestModels(TestCase):
