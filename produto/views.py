@@ -35,4 +35,7 @@ class Compra(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # FIXME
+        context['quantidade'] = 7
+        context['total'] = 56.7
         return context
