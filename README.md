@@ -35,3 +35,8 @@ Na raíz do projeto: `python manage.py runserver`
 ## Testes
 Pré-requisito: Instalar as dependências de desenvolvimento (requirements-dev.txt).<br>
 Executar todos os testes: `python manage.py test`
+
+## Formatação do código
+Para formatar o código, instale as dependências de desenvolvimento (requirements-dev.txt) e execute na raíz 
+do projeto:<br>
+`black .`
