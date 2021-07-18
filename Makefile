@@ -3,3 +3,6 @@ run:
 
 test:
 	python manage.py test
+
+black:
+	black .
