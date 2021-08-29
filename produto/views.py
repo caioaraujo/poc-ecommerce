@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import TemplateView, FormView
@@ -31,7 +33,13 @@ class ProdutoId(FormView, TemplateView):
         self.request.session["marca"] = compra["marca"]
         self.request.session["codigo"] = compra["codigo"]
         self.request.session["nome"] = compra["nome"]
+        self.request.session["total"] = self.calcula_total(compra)
         return super().form_valid(form)
+
+    def calcula_total(self, compra):
+        quantidade = compra["quantidade"]
+        valor = compra["valor"].replace(",", ".")
+        return str(quantidade * Decimal(valor))
 
 
 class Compra(LoginRequiredMixin, TemplateView):
@@ -44,5 +52,5 @@ class Compra(LoginRequiredMixin, TemplateView):
         context["marca"] = self.request.session["marca"]
         context["codigo"] = self.request.session["codigo"]
         context["nome"] = self.request.session["nome"]
-        context["total"] = 777  # FIXME
+        context["total"] = self.request.session["total"]
         return context

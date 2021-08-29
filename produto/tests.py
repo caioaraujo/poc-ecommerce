@@ -68,3 +68,19 @@ class TestViews(TestCase):
         response = self.client.get("/produto/1/", follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual("Produto 1", response.context["produto"].nome)
+
+    def test_compra_produto__success(self):
+        self.client.force_login(self.user)
+        data = {
+            "quantidade": 3,
+            "marca": "ABC",
+            "codigo": "123",
+            "nome": "Produto 1",
+            "valor": "12.34",
+        }
+        response = self.client.post("/produto/1/", data, follow=True)
+        self.assertRedirects(response, "/finalizar/", status_code=302)
+        self.assertEqual(self.client.session["quantidade"], 3)
+        self.assertEqual(self.client.session["marca"], "ABC")
+        self.assertEqual(self.client.session["nome"], "Produto 1")
+        self.assertEqual(self.client.session["total"], "37.02")

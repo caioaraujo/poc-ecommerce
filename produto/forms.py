@@ -7,3 +7,4 @@ class CompraForm(forms.Form):
     marca = forms.CharField(widget=forms.HiddenInput(), required=False)
     codigo = forms.CharField(widget=forms.HiddenInput(), required=False)
     nome = forms.CharField(widget=forms.HiddenInput(), required=False)
+    valor = forms.CharField(widget=forms.HiddenInput(), required=False)
