@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.views.generic import TemplateView, FormView
 
 from .forms import CompraForm
@@ -25,7 +26,11 @@ class ProdutoId(FormView, TemplateView):
         return context
 
     def form_valid(self, form):
-        # TODO - Salvar compra
+        compra = form.cleaned_data
+        self.request.session["quantidade"] = compra["quantidade"]
+        self.request.session["marca"] = compra["marca"]
+        self.request.session["codigo"] = compra["codigo"]
+        self.request.session["nome"] = compra["nome"]
         return super().form_valid(form)
 
 
@@ -35,7 +40,9 @@ class Compra(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # FIXME
-        context["quantidade"] = 7
-        context["total"] = 56.7
+        context["quantidade"] = self.request.session["quantidade"]
+        context["marca"] = self.request.session["marca"]
+        context["codigo"] = self.request.session["codigo"]
+        context["nome"] = self.request.session["nome"]
+        context["total"] = 777  # FIXME
         return context

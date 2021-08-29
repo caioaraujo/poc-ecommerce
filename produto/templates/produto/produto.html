@@ -15,6 +15,9 @@
             <label for="id_quantidade">Qtde.:</label>
             <input id="id_quantidade" type="number" name="quantidade" min="1" max="{{ produto.quantidade_disponivel }}"
                    required>
+            <input id="id_marca" name="marca" type="hidden" value="{{ produto.marca }}">
+            <input id="id_codigo" name="codigo" type="hidden" value="{{ produto.codigo }}">
+            <input id="id_nome" name="nome" type="hidden" value="{{ produto.nome }}">
         </p>
         <input type="submit" value="Adicionar ao carrinho">
     </div>
