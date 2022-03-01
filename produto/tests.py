@@ -1,14 +1,14 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from freezegun import freeze_time
-from model_mommy import mommy
+from model_bakery import baker
 
 from .models import Produto
 
 
 class TestModels(TestCase):
     def setUp(self):
-        self.produto = mommy.make("Produto", id=15, nome="Super produto")
+        self.produto = baker.make("Produto", id=15, nome="Super produto")
 
     @freeze_time("2018-01-01 08:45")
     def test_cria_produto(self):
@@ -53,9 +53,9 @@ class TestModels(TestCase):
 
 class TestViews(TestCase):
     def setUp(self):
-        self.user = mommy.make(User)
-        mommy.make("Produto", id=1, nome="Produto 1")
-        mommy.make("Produto", _quantity=10)
+        self.user = baker.make(User)
+        baker.make("Produto", id=1, nome="Produto 1")
+        baker.make("Produto", _quantity=10)
 
     def test_get_produtos(self):
         self.client.force_login(self.user)

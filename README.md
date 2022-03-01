@@ -2,14 +2,14 @@
 Prova de conceito para validar tecnologias e arquitetura.
 
 ## Requisitos
-Python 3.9+
+Python 3.10+
 
 Recomendado:<br>
 Pyenv (https://github.com/pyenv/pyenv)
 
 ## Instalação
 Recomendado uso de virtual environment (venv).<br>
-Ex Ubuntu: `python3.9 -m venv ~/.local/share/virtualenvs/poc-ecommerce`
+Ex Ubuntu: `python3.10 -m venv ~/.local/share/virtualenvs/poc-ecommerce`
 
 Após criação, ativar a venv:<br>
 Ubuntu: `source ~/.local/share/virtualenvs/poc-ecommerce/bin/activate`<br>
