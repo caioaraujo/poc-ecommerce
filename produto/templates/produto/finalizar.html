@@ -6,9 +6,22 @@ Resumo da compra:
 {% load humanize %}
 <p>Total: R$ {{total|intcomma}}</p>
 
-<p>Escolha a forma de pagamento:</p>
-<ul>
- <li>Boleto</li>
- <li>Débito</li>
- <li>Cŕedito</li>
-</ul>
+<form method="post">
+    {% csrf_token %}
+    <div id="forma_pagamento">
+        <p>Escolha a forma de pagamento:</p>
+        <select name="pagamento">
+            {% for x,y in form.fields.forma_pagamento.choices %}
+                <option value="{{x}}"{% if form.fields.forma_pagamento.value == x %} selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>
+
+<p>
+    <a href="{{request.META.HTTP_REFERER}}">Voltar</a>
+    {% if user.is_authenticated %}
+    {% url 'login:logout' as logout_url %}
+    <a href="{{ logout_url }}">Logout</a>
+    {% endif %}
+</p>
